@@ -13,7 +13,7 @@ public class DemoCrudRepository {
         try(Connection myConn = DatabaseConnection.getInstance()) {
 
             // instancia del crud repository
-            Repository<Employee> repository = new EmpoyeeRepository();
+            Repository<Employee> repository = new EmpoyeeRepository(myConn);
 
             // GET: obtener un empleado mediante su ID
             Employee e = repository.getById(2);
@@ -22,7 +22,7 @@ public class DemoCrudRepository {
             repository.findAll();
 
             // CREATE: dar de alta un empleado
-            Employee newEmployee = new Employee("Dustin", "William", "Scarlett", "dastin.scarlett@gmail.com", 65000.00F);
+            Employee newEmployee = new Employee("Dustin", "William", "Scarlett", "dastin.scarlett@gmail.com", 65000.00F, "");
             repository.save(newEmployee);
 
             // UPDATE: actualizar un registro/empleado

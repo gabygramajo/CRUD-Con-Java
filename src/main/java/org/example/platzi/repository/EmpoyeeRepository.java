@@ -9,18 +9,17 @@ import java.util.List;
 
 public class EmpoyeeRepository implements Repository <Employee>{
 
-    // para que en cada acción se tome como una sola conexión
-    private Connection connection;
-
-    public EmpoyeeRepository(Connection connection) {
-        this.connection = connection;
+    // para que en cada acción se tome como una sola conexión, en el pool, y se pueda cerrar
+    private Connection getConnection() throws SQLException {
+        return DatabaseConnection.getConnection();
     }
 
     //abre una conexión a la BD y ejecuta una query para traer todos los empleados almacenándolos en un List
     @Override
     public List<Employee> findAll() throws SQLException {
         List<Employee> employees = new ArrayList<>();
-        try (Statement statement = connection.createStatement();
+        try (Connection connection = getConnection(); // Para que la conexion se pueda cerrar
+             Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT * FROM employees") ) {
             while (resultSet.next()) {
                 employees.add(createEmployee(resultSet));
@@ -34,7 +33,8 @@ public class EmpoyeeRepository implements Repository <Employee>{
     public Employee getById(Integer id) throws SQLException {
         Employee employee = null;
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employees WHERE id = ?")){
+        try (Connection connection = getConnection(); // Para que la conexion se pueda cerrar
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employees WHERE id = ?")){
             preparedStatement.setInt(1, id);
             try (ResultSet resultset = preparedStatement.executeQuery()) {
                 if (resultset.next()) {
@@ -58,7 +58,8 @@ public class EmpoyeeRepository implements Repository <Employee>{
 
 
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+        try (Connection connection = getConnection();// Para que la conexion se pueda cerrar
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, employee.getFirst_name());
             preparedStatement.setString(2, employee.getPa_surname());
             preparedStatement.setString(3, employee.getMa_surname());
@@ -87,7 +88,8 @@ public class EmpoyeeRepository implements Repository <Employee>{
 
         String sql = "DELETE FROM employees WHERE id=?";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (Connection connection = getConnection();// Para que la conexion se pueda cerrar
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();

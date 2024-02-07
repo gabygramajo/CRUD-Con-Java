@@ -5,6 +5,7 @@ import org.example.platzi.model.Employee;
 import org.example.platzi.repository.EmpoyeeRepository;
 import org.example.platzi.repository.Repository;
 import org.example.platzi.util.DatabaseConnection;
+import org.example.platzi.view.SwingApp;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,13 +13,16 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-        System.out.println("----- Listar todos ------");
-        Repository<Employee> repository = new EmpoyeeRepository();
-        repository.findAll().forEach(System.out::println);
+        SwingApp swingApp = new SwingApp();
+        swingApp.setVisible(true);
 
-        System.out.println("----- Listar por ID ------");
-        System.out.println(repository.getById(2));
-        System.out.println(repository.getById(4));
+//        System.out.println("----- Listar todos ------");
+//        Repository<Employee> repository = new EmpoyeeRepository();
+//        repository.findAll().forEach(System.out::println);
+//
+//        System.out.println("----- Listar por ID ------");
+//        System.out.println(repository.getById(2));
+//        System.out.println(repository.getById(4));
 
     }
 }
